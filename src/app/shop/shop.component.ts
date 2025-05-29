@@ -1,26 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // تأكد من استيراد Component و OnInit
 import { ShopService } from './shop.service';
 import { IPagnation } from '../shared/Models/Pagnation';
 import { IProduct } from '../shared/Models/Product';
-import { __values } from 'tslib';
 
 @Component({
   selector: 'app-shop',
   standalone: false,
   templateUrl: './shop.component.html',
-  styleUrl: './shop.component.scss'
+  styleUrls: ['./shop.component.scss'], // ✅ جمع
 })
-export class ShopComponent implements OnInit{
-  constructor(private shopService:ShopService) { }
+export class ShopComponent implements OnInit {
+  product: IProduct[] = [];
+
+  constructor(private shopService: ShopService) {}
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.getAllProducts(); 
   }
-  product: IProduct|any ;
- getAllProducts(){
-this.shopService.getProduct().subscribe({
-  next : (value : IPagnation) => {
-    this.product = value.data;
+
+  getAllProducts(): void {
+    this.shopService.getProduct().subscribe({
+      next: (value: IPagnation) => {
+       // this.product = value.data;
+      },
+      error: (err) => {
+        console.error('خطأ في جلب المنتجات:', err);
+      },
+    });
   }
-})
-}
 }
